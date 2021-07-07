@@ -1,5 +1,5 @@
-const Alumno = require("./schemas/Alumno");
-const Examen = require("./schemas/Examen");
+const Alumno = require("../schemas/Alumno");
+const Examen = require("../schemas/Examen");
 
 const crearExamen = async () => {
   Examen.bulkCreate([
@@ -21,15 +21,11 @@ const listarExamenes = async () => {
       model: Alumno,
       required: true,
     },
+    attributes: {
+      exclude: "alumno",
+    },
   });
-  for (const examen of examenes) {
-    console.log(
-      examen.id,
-      examen.Alumno.nombre,
-      examen.Alumno.apellidos,
-      examen.Alumno.nota
-    );
-  }
+  return examenes;
 };
 
 module.exports = {

@@ -1,14 +1,10 @@
 const { Op } = require("sequelize");
-const Alumno = require("./schemas/Alumno");
+const Alumno = require("../schemas/Alumno");
 
-const crearAlumno = async () => {
+const crearAlumno = async (alumno) => {
   try {
-    const nuevoAlumno = await Alumno.create({
-      nombre: "Pepito",
-      dni: "98888282W",
-      nota: 10,
-    });
-    console.log(nuevoAlumno.nombre);
+    const nuevoAlumno = await Alumno.create(alumno);
+    return nuevoAlumno;
   } catch (err) {
     console.log("No se ha podido crear el alumno.");
     console.log(err.message);
@@ -36,28 +32,28 @@ const modificarAlumno = async () => {
   }
 };
 
-const borrarAlumno = async () => {
+const borrarAlumno = async (id) => {
   const alumnoBorrado = await Alumno.destroy({
-    truncate: true,
+    where: {
+      id,
+    },
   });
-  console.log(alumnoBorrado);
+  return alumnoBorrado;
 };
 
 const listarAlumnos = async () => {
-  const alumnos = await Alumno.findAll({
-    where: {
-      dni: {
-        [Op.like]: "2%",
-      },
-    },
-  });
-  for (const alumno of alumnos) {
-    console.log(`${alumno.id} -> ${alumno.nombre} ${alumno.apellidos}`);
-  }
+  const alumnos = await Alumno.findAll();
+  return alumnos;
+};
+
+const getAlumno = async (id) => {
+  const alumno = await Alumno.findByPk(id);
+  return alumno;
 };
 
 module.exports = {
   listarAlumnos,
+  getAlumno,
   crearAlumno,
   modificarAlumno,
   borrarAlumno,
